@@ -41,5 +41,5 @@ int IsAutoclicking(bool* autoclicking, int* slot){
 	}else{
 		*slot = 0;
 	}
-	return *autoclicking ? rand()%40+150 : 10;
+	return *autoclicking ? rand()%20+10 : 10;
 }
