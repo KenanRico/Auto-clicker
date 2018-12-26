@@ -8,7 +8,6 @@ typedef char bool;
 #define false 0
 
 
-bool ContextIsMinecraft();
 int IsAutoclicking(bool*, int*);
 
 int main(){
@@ -17,7 +16,7 @@ int main(){
 	printf("Starting autoclicker...\n");
 	while(true){
 		Sleep(IsAutoclicking(&autoclicking, &slot));
-		if(ContextIsMinecraft()&&autoclicking){
+		if(autoclicking){
 			//press and release left button
 			if(slot==1){
 				mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
@@ -29,10 +28,6 @@ int main(){
 		}
 	}
     return 0;
-}
-
-bool ContextIsMinecraft(){
-	return (GetForegroundWindow()==FindWindowA(NULL, "Minecraft 1.13.2"));
 }
 
 int IsAutoclicking(bool* autoclicking, int* slot){
