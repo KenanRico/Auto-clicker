@@ -8,14 +8,15 @@ typedef char bool;
 #define false 0
 
 
-int IsAutoclicking(bool*, int*);
+int IsAutoclicking(bool*, bool*, int*);
 
 int main(){
 	bool autoclicking = false;
+	bool mode = false; //false for rate alternation (20~80 ms), true for fast rate (5 ms)
 	int slot = 0;
 	printf("Starting autoclicker...\n");
 	while(true){
-		Sleep(IsAutoclicking(&autoclicking, &slot));
+		Sleep(IsAutoclicking(&autoclicking, &mode, &slot));
 		if(autoclicking){
 			//press and release left button
 			if(slot==1){
@@ -30,8 +31,9 @@ int main(){
     return 0;
 }
 
-int IsAutoclicking(bool* autoclicking, int* slot){
+int IsAutoclicking(bool* autoclicking, bool* mode, int* slot){
 	*autoclicking = ( *autoclicking != (GetAsyncKeyState((int)'F')&0x00000001)>0 );
+	*mode = ( *mode != (GetAsyncKeyState((int)'R')&0x00000001)>0 );
 	if(*autoclicking){
 		if((GetAsyncKeyState((int)'1')&0x00000001)>0){
 			*slot = 1;
@@ -41,5 +43,5 @@ int IsAutoclicking(bool* autoclicking, int* slot){
 	}else{
 		*slot = 0;
 	}
-	return *autoclicking ? rand()%20+10 : 10;
+	return *autoclicking ? (*mode ? rand()%60+20 : 10) : 10;
 }
