@@ -12,10 +12,10 @@ Please configure the autoclicker's control as following:
 	- right: right mouse button
 4) Change the controls by changing the settings to the right of ":". Support single charactors (0~9, A-Z(must be caps!)), left shift (lshift), left control (lctrl), and middle mouse button (mmiddle).
 	example setting:
-		trigger:J
-		mode:I
-		left:lshift
-		right:lctrl
+		- trigger:J
+		- mode:I
+		- left:lshift
+		- right:lctrl
 5) Please respect the config file format and do not fk w/ it, otherwise fam you finna have to comeback to check on this README again
 
 
