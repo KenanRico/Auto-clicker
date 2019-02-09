@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 #include <windows.h>
 
@@ -8,21 +9,34 @@ typedef char bool;
 #define false 0
 
 
-int IsAutoclicking(bool*, bool*, int*);
+typedef struct _Attributes{
+	bool autoclicking;
+	bool mode;
+	int button;
+} Attributes;
+
+
+//int IsAutoclicking(bool*, bool*, int*);
+void DefineKeys(int*, int);
+int IsAutoclicking(Attributes*, int const *);
 
 int main(){
-	bool autoclicking = false;
-	bool mode = false; //false for rate alternation (20~80 ms), true for fast rate (5 ms)
-	int slot = 0;
 	printf("Starting autoclicker...\n");
+	//def keys
+	int keys[4];
+	DefineKeys(&keys, 4);
+	printf("%d %d %d %d\n", keys[0], keys[1], keys[2], keys[3]);
+	//def autoclick attribs
+	Attributes attribs = {false, false, 1};
 	while(true){
-		Sleep(IsAutoclicking(&autoclicking, &mode, &slot));
-		if(autoclicking){
+		//Sleep(IsAutoclicking(&autoclicking, &mode, &button, ));
+		Sleep(IsAutoclicking(&attribs, keys));
+		if(attribs.autoclicking){
 			//press and release left button
-			if(slot==1){
+			if(attribs.button==1){
 				mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 				mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
-			}else if(slot==2){
+			}else if(attribs.button==2){
 				mouse_event(MOUSEEVENTF_RIGHTDOWN, 0, 0, 0, 0);
 				mouse_event(MOUSEEVENTF_RIGHTUP, 0, 0, 0, 0);
 			}
@@ -31,17 +45,74 @@ int main(){
     return 0;
 }
 
-int IsAutoclicking(bool* autoclicking, bool* mode, int* slot){
-	*autoclicking = ( *autoclicking != (GetAsyncKeyState((int)'F')&0x00000001)>0 );
-	*mode = ( *mode != (GetAsyncKeyState((int)'R')&0x00000001)>0 );
-	if(*autoclicking){
-		if((GetAsyncKeyState((int)'1')&0x00000001)>0){
-			*slot = 1;
-		}else if((GetAsyncKeyState((int)'2')&0x00000001)>0){
-			*slot = 2;
+void DefineKeys(int* keys, int kc){
+	FILE* file = fopen("./config/keyconf.conf", "r");
+	char line[128];
+	int length = sizeof(line);
+	int i=0; 
+	while(fgets(line, length, file) && i<kc){
+		char opt[16];
+		memcpy(opt, strtok(line, ":"), 15); opt[15] = '\0';
+		char key[16];
+		memcpy(key, strtok(NULL, ":"), 15); key[15] = '\0';
+		int k = 0;
+		if(strlen(key)==2){
+			k = (int)key[0];
+		}else{
+			if(strcmp(key, "lshift\n")==0){
+				k = VK_LSHIFT;
+			}else if(strcmp(key, "lctrl\n")==0){
+				k = VK_LCONTROL;
+			}else if(strcmp(key, "mmiddle\n")==0){
+				k = VK_MBUTTON;
+			}
 		}
-	}else{
-		*slot = 0;
+		keys[i++] = k;
+		printf("%s is set to 0x%x\n", opt, k);
 	}
-	return *autoclicking ? (*mode ? rand()%60+20 : 10) : 10;
+	fclose(file);
+	/*
+	printf("Enter key for autoclick trigger > ");
+	scanf("%c", &keys->click);
+	if(keys->click>=97 && keys->click<=122){
+		keys->click += 'A'-'a';
+	}
+	printf("Enter key for mode switching > ");
+	scanf("%c", &keys->mode);
+	if(keys->click>=97 && keys->click<=122){
+		keys->click += 'A'-'a';
+	}
+	printf("Enter key for left click > ");
+	scanf("%c", &keys->left);
+	if(keys->click>=97 && keys->click<=122){
+		keys->click += 'A'-'a';
+	}
+	printf("Enter key for right click > ");
+	scanf("%c", &keys->right);
+	if(keys->click>=97 && keys->click<=122){
+		keys->click += 'A'-'a';
+	}
+	*/
+}
+/*
+int IsAutoclicking(bool* autoclicking, bool* mode, int* button){
+	*autoclicking = ( *autoclicking != (GetAsyncKeyState((int)'G')&0x00000001)>0 );
+	*mode = ( *mode != (GetAsyncKeyState((int)'T')&0x00000001)>0 );
+	if((GetAsyncKeyState((int)'1')&0x00000001)>0){
+		*button = 1;
+	}else if((GetAsyncKeyState((int)'2')&0x00000001)>0){
+		*button = 2;
+	}
+	return *autoclicking ? (*mode ? 10 : rand()%60+20) : 10;
+}
+*/
+int IsAutoclicking(Attributes* attribs, int const * keys){
+	attribs->autoclicking = ( attribs->autoclicking != (GetAsyncKeyState(keys[0])&0x00000001)>0 );
+	attribs->mode = ( attribs->mode != (GetAsyncKeyState(keys[1])&0x00000001)>0 );
+	if((GetAsyncKeyState(keys[2])&0x00000001)>0){
+		attribs->button = 1;
+	}else if((GetAsyncKeyState(keys[3])&0x00000001)>0){
+		attribs->button = 2;
+	}
+	return attribs->autoclicking ? (attribs->mode ? 10 : rand()%80+100) : 10;
 }
