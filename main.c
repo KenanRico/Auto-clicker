@@ -71,41 +71,8 @@ void DefineKeys(int* keys, int kc){
 		printf("%s is set to 0x%x\n", opt, k);
 	}
 	fclose(file);
-	/*
-	printf("Enter key for autoclick trigger > ");
-	scanf("%c", &keys->click);
-	if(keys->click>=97 && keys->click<=122){
-		keys->click += 'A'-'a';
-	}
-	printf("Enter key for mode switching > ");
-	scanf("%c", &keys->mode);
-	if(keys->click>=97 && keys->click<=122){
-		keys->click += 'A'-'a';
-	}
-	printf("Enter key for left click > ");
-	scanf("%c", &keys->left);
-	if(keys->click>=97 && keys->click<=122){
-		keys->click += 'A'-'a';
-	}
-	printf("Enter key for right click > ");
-	scanf("%c", &keys->right);
-	if(keys->click>=97 && keys->click<=122){
-		keys->click += 'A'-'a';
-	}
-	*/
 }
-/*
-int IsAutoclicking(bool* autoclicking, bool* mode, int* button){
-	*autoclicking = ( *autoclicking != (GetAsyncKeyState((int)'G')&0x00000001)>0 );
-	*mode = ( *mode != (GetAsyncKeyState((int)'T')&0x00000001)>0 );
-	if((GetAsyncKeyState((int)'1')&0x00000001)>0){
-		*button = 1;
-	}else if((GetAsyncKeyState((int)'2')&0x00000001)>0){
-		*button = 2;
-	}
-	return *autoclicking ? (*mode ? 10 : rand()%60+20) : 10;
-}
-*/
+
 int IsAutoclicking(Attributes* attribs, int const * keys){
 	attribs->autoclicking = ( attribs->autoclicking != (GetAsyncKeyState(keys[0])&0x00000001)>0 );
 	attribs->mode = ( attribs->mode != (GetAsyncKeyState(keys[1])&0x00000001)>0 );
