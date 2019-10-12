@@ -8,7 +8,7 @@ Easy to use, one-button-triggered autoclicker
 
 Requirement list:
 1) Windows x86/x64 operating system
-2) Mingw GNU compiler (download -> https://sourceforge.net/projects/mingw/)
+2) Mingw GNU compiler (download -> https://sourceforge.net/projects/mingw/). Install Mingw, make sure that `mingw32-make` executable is exposed to whole system; this is typically done by adding `<your mingw path>/bin` to PATH.
 
 ---
 
