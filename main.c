@@ -24,7 +24,7 @@ int main(){
 	printf("Starting autoclicker...\n");
 	//def keys
 	int keys[4];
-	DefineKeys(&keys, 4);
+	DefineKeys(&keys[0], 4);
 	printf("%d %d %d %d\n", keys[0], keys[1], keys[2], keys[3]);
 	//def autoclick attribs
 	Attributes attribs = {false, false, 1};
@@ -74,8 +74,8 @@ void DefineKeys(int* keys, int kc){
 }
 
 int IsAutoclicking(Attributes* attribs, int const * keys){
-	attribs->autoclicking = ( attribs->autoclicking != (GetAsyncKeyState(keys[0])&0x00000001)>0 );
-	attribs->mode = ( attribs->mode != (GetAsyncKeyState(keys[1])&0x00000001)>0 );
+	attribs->autoclicking = ( attribs->autoclicking != ((GetAsyncKeyState(keys[0])&0x00000001)>0) );
+	attribs->mode = ( attribs->mode != ((GetAsyncKeyState(keys[1])&0x00000001)>0) );
 	if((GetAsyncKeyState(keys[2])&0x00000001)>0){
 		attribs->button = 1;
 	}else if((GetAsyncKeyState(keys[3])&0x00000001)>0){
