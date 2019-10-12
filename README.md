@@ -1,5 +1,24 @@
 # Auto-clicker
+
 Easy to use, one-button-triggered autoclicker
+
+---
+
+## __REQUIREMENTS__
+
+Requirement list:
+1) Windows x86/x64 operating system
+2) Mingw GNU compiler (download -> https://sourceforge.net/projects/mingw/)
+
+---
+
+## __BUILD__
+
+To build project, simply execute `AutoMake.bat` script. Target executable is named `autoclicker.exe` by default.
+
+---
+
+## __USAGE GUIDE__
 
 Please configure the autoclicker's control as following:
 
